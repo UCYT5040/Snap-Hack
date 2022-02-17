@@ -5,7 +5,7 @@ Snap Hack is work in progress.
 ## Hacks
 
 1. Blockly
-2. 
+
 I plan to add a custom Javascript block to blockly, as well as some better theming.
 Javascript functions will be documented.
 2. BOTCode
