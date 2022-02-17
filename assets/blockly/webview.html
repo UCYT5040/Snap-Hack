@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!-- HTML file to host Blockly in a mobile WebView. -->
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <style type="text/css">
+    html, body, #blocklyDiv {
+      border: 0;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+  </style>
+  <script src="toolbox_standard.js"></script>
+
+  <script src="blockly_compressed.js"></script>
+  <script src="javascript_compressed.js"></script>
+  <script src="blocks_compressed.js"></script>
+  <!-- TODO: Select msg file based on locale. -->
+  <script src="msg/js/en.js"></script>
+</head>
+<body>
+  <div id="blocklyDiv"></div>
+
+  <script type="text/javascript">
+    var workspacePlayground = Blockly.inject('blocklyDiv', {
+          media: 'media/',
+          toolbox: BLOCKLY_TOOLBOX_XML['standard'],
+          zoom: {controls: true}
+    });
+
+//todo if correct bots are not connected and it loads it in, it'll just say default text
+
+    Android.getAutosaveData();
+
+    createBotBlock();
+
+    function showCode() {
+      // Generate JavaScript code and display it.
+
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      Blockly.JavaScript.addReservedWords('code');
+      var code = Blockly.JavaScript.workspaceToCode(workspacePlayground);
+      try {
+        //eval(code);
+        console.log(code);
+        Android.sendData(code);
+      } catch (error) {
+        console.log(error);
+        Android.sendData(error);
+      }
+    }
+
+    function saveCode(){
+      try {
+        var xml = Blockly.Xml.workspaceToDom(workspacePlayground);
+        var savedText = Blockly.Xml.domToText(xml);
+        Android.sendSaveData(savedText);
+      } catch (error) {
+        console.log(error);
+        Android.showToast("There was an error saving your code");
+      }
+    }
+
+    function autosaveCode(){
+      try {
+        var xml = Blockly.Xml.workspaceToDom(workspacePlayground);
+        var savedText = Blockly.Xml.domToText(xml);
+        Android.sendAutosaveData(savedText);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    function cloudSaveCode(){
+      try {
+        var xml = Blockly.Xml.workspaceToDom(workspacePlayground);
+        var savedText = Blockly.Xml.domToText(xml);
+        Android.sendCloudSaveData(savedText);
+      } catch (error) {
+        console.log(error);
+        Android.showToast("There was an error saving your code");
+      }
+    }
+
+    function saveCodeFromLoad(code, inputCode){
+      try {
+        var xml = Blockly.Xml.workspaceToDom(workspacePlayground);
+        var savedText = Blockly.Xml.domToText(xml);
+        Android.sendLoadSaveData(code, inputCode);
+      } catch (error) {
+        console.log(error);
+        Android.showToast("There was an error saving your code");
+      }
+    }
+
+    function loadCode(code){
+
+      try {
+        var xml = Blockly.Xml.textToDom(code);
+        Blockly.Xml.domToWorkspace(xml, workspacePlayground);
+
+
+        var blocks = workspacePlayground.getTopBlocks(false);
+          for (var i = 0, block; block = blocks[i]; i++) {
+
+            childList = [];
+
+            if(block.getField('DEVICE_UUID') == null){
+
+              getChild(block);
+
+              for( var j = 0, block; block = childList[j]; j++){
+                if(block.getFieldValue('DEVICE_NAME') == "Device Name"){
+                  block.dispose(true);
+                }
+              }
+            }else{
+
+              if(block.getField('DEVICE_NAME') != null){
+                getChild(block);
+
+                for( var j = 0, blockChild; blockChild = childList[j]; j++){
+                console.log("else blockChild: " + blockChild);
+                  if(blockChild.getField('DEVICE_NAME') != null && blockChild.getFieldValue('DEVICE_NAME') == "Device Name"){
+                    blockChild.dispose(true);
+                  }
+                }
+
+                if(block.getFieldValue('DEVICE_NAME') == "Device Name"){
+                  block.dispose(true);
+                }
+              }
+            }
+          }
+      } catch (error) {
+        console.log(error);
+        Android.showToast("There was an error loading your code");
+      }
+    }
+
+    function cloudLoadCode(code, inputCode){
+
+      try {
+        var xml = Blockly.Xml.textToDom(code);
+        Blockly.Xml.domToWorkspace(xml, workspacePlayground);
+
+
+        var blocks = workspacePlayground.getTopBlocks(false);
+          for (var i = 0, block; block = blocks[i]; i++) {
+
+            childList = [];
+
+            if(block.getField('DEVICE_UUID') == null){
+
+              getChild(block);
+
+              for( var j = 0, block; block = childList[j]; j++){
+                if(block.getFieldValue('DEVICE_NAME') == "Device Name"){
+                  block.dispose(true);
+                }
+              }
+            }else{
+
+              if(block.getField('DEVICE_NAME') != null){
+                getChild(block);
+
+                for( var j = 0, blockChild; blockChild = childList[j]; j++){
+                console.log("else blockChild: " + blockChild);
+                  if(blockChild.getField('DEVICE_NAME') != null && blockChild.getFieldValue('DEVICE_NAME') == "Device Name"){
+                    blockChild.dispose(true);
+                  }
+                }
+
+                if(block.getFieldValue('DEVICE_NAME') == "Device Name"){
+                  block.dispose(true);
+                }
+              }
+            }
+          }
+          saveCodeFromLoad(code, inputCode);
+
+        Android.sendPopUp(true);
+      } catch (error) {
+        console.log(error);
+        Android.sendPopUp(false);
+      }
+    }
+
+    var botNameList = [];
+    var botUUIDList = [];
+    var circuitNameList = [];
+    var circuitUUIDList = [];
+
+    function showBots(tempCircuitNameList, tempCircuitUUIDList) {
+      console.log("showBots: " + tempCircuitNameList.length + " " + tempCircuitNameList + " " + tempCircuitUUIDList);
+        circuitNameList = tempCircuitNameList;
+        circuitUUIDList = tempCircuitUUIDList;
+
+      console.log("showBots2: " +circuitNameList.length + " " + circuitNameList + " " + circuitUUIDList);
+    }
+
+    function getBotName(UUID){
+      /*if(botUUIDList.includes(UUID)){
+        for(var i = 0; i < botUUIDList.length; i ++){
+          if(botUUIDList[i] === UUID){
+            if(botNameList[i].length > 3){
+              return botNameList[i].substring(3);
+            }else{
+              return botNameList[i];
+            }
+          }
+        }
+      }else */if(circuitUUIDList.includes(UUID)){
+      console.log("circuitUUID");
+        for(var i = 0; i < circuitUUIDList.length; i ++){
+          if(circuitUUIDList[i] === UUID){
+            if(circuitNameList[i].length > 3){
+              return circuitNameList[i].substring(3);
+            }else{
+              return circuitNameList[i];
+           }
+          }
+        }
+      }else{
+        return null;
+      }
+    }
+
+    function createBotBlock(){
+      Blockly.Blocks['bot_block'] = {
+          // This gives us our UI, just a label field.
+          init: function() {
+            this.appendValueInput("NAME")
+              .setCheck("Bot")
+              .appendField("Device Name", 'DEVICE_NAME')
+              .appendField("Device UUID", 'DEVICE_UUID');
+            this.setOutput(true, "Bot");
+            this.setColour("#78787a");
+          },
+
+        // This is where we will store the device ID for use in code generation.
+        deviceUUID: null,
+
+
+        // This saves our device ID to xml.
+        mutationToDom: function() {
+          var container = document.createElement('mutation');
+          container.setAttribute('deviceid', this.deviceUUID);
+          console.log("mutationtodom: " + container.getAttribute('deviceid'));
+          return container;
+        },
+        // This retrieves our device ID from xml, and changes the label to have
+        // the correct name.
+        domToMutation: function(container) {
+          this.deviceUUID = container.getAttribute('deviceid');
+          this.setFieldValue(getBotName(this.deviceUUID), 'DEVICE_NAME');
+          this.setFieldValue(this.deviceUUID, 'DEVICE_UUID');
+          this.getField('DEVICE_UUID').setVisible(false);
+          console.log("domtomutation: " + this.getFieldValue(getBotName(this.deviceUUID)));
+        },
+      };
+
+      Blockly.Blocks['circuit_block'] = {
+          // This gives us our UI, just a label field.
+          init: function() {
+            this.appendValueInput("NAME")
+              .setCheck("Circuit")
+              .appendField("Device Name", 'DEVICE_NAME')
+              .appendField("Device UUID", 'DEVICE_UUID');
+            this.setOutput(true, "Circuit");
+            this.setColour("#007cac");
+          },
+
+
+        // This is where we will store the device ID for use in code generation.
+        deviceUUID: null,
+
+
+        // This saves our device ID to xml.
+        mutationToDom: function() {
+          var container = document.createElement('mutation');
+          container.setAttribute('deviceid', this.deviceUUID);
+          return container;
+        },
+        // This retrieves our device ID from xml, and changes the label to have
+        // the correct name.
+        domToMutation: function(container) {
+          this.deviceUUID = container.getAttribute('deviceid');
+          this.setFieldValue(getBotName(this.deviceUUID), 'DEVICE_NAME');
+          this.setFieldValue(this.deviceUUID, 'DEVICE_UUID');
+          this.getField('DEVICE_UUID').setVisible(false);
+        },
+      };
+
+      workspacePlayground.botsFlyoutCallback = function(workspace) {
+        var xmlList = [];
+        for( var i = 0; i <  botUUIDList.length; i++){
+          var blockText = '<block type="bot_block">' +
+            '<mutation deviceid="' + botUUIDList[i] + '"/>' +
+            '</block>';
+          var block = Blockly.Xml.textToDom(blockText);
+          xmlList.push(block);
+        }
+        for( var i = 0; i <  circuitUUIDList.length; i++){
+          var blockText = '<block type="circuit_block">' +
+            '<mutation deviceid="' + circuitUUIDList[i] + '"/>' +
+            '</block>';
+          var block = Blockly.Xml.textToDom(blockText);
+          xmlList.push(block);
+        }
+      return xmlList;
+      };
+    }
+
+    var childList = [];
+
+    function getChild(block){
+      if(block != null){
+        if(block.getInputTargetBlock('DO') != null){
+          getChild(block.getInputTargetBlock('DO'));
+        }else if(block.getInputTargetBlock('repeatForever') != null){
+          getChild(block.getInputTargetBlock('DO'));
+        }
+
+        if(block.getChildren() != null && block.getChildren().length != 0){
+          var blockChild = block.getChildren();
+          var child = blockChild[0];
+          childList.push(child);
+          console.log("CHILD! " + blockChild.length + " " + blockChild);
+          getChild(child);
+        }else{
+          console.log("NULL");
+        }
+
+        if(block.getNextBlock() != null){
+          getChild(block.getNextBlock());
+        }
+      }
+    }
+
+    workspacePlayground.registerToolboxCategoryCallback(
+      'MEEPERS', workspacePlayground.botsFlyoutCallback);
+
+  </script>
+</body>
+</html>
