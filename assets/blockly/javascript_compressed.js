@@ -429,3 +429,9 @@ Blockly.JavaScript['motor_block'] = function(block) {
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
+Blockly.JavaScript['hacked_custom'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = block.getFieldValue('NAME')+"\n";
+  return code;
+};
