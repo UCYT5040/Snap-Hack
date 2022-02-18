@@ -1145,6 +1145,22 @@ Blockly.defineBlocksWithJsonArray([
   "colour": 230,
   "tooltip": "",
   "helpUrl": ""
+},
+  {
+  "type": "hacked_custom",
+  "message0": "custom %1",
+  "args0": [
+    {
+      "type": "field_input",
+      "name": "js",
+      "text": ""
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 230,
+  "tooltip": "",
+  "helpUrl": ""
 }
 ]);
 
