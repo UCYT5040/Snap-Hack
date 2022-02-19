@@ -1,6 +1,6 @@
 # Snap Hack
 
-Snap Hack is work in progress.
+Snap Hack is work in progress, but ready for you to use.
 
 ## Hacks
 
