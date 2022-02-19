@@ -432,6 +432,7 @@ Blockly.JavaScript['motor_block'] = function(block) {
 
 Blockly.JavaScript['hacked_custom'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = prompt("enter code for custom block (if u have multiple they run in order of apperance)")+"\n";
+
+  var code = "'to be added later'";
   return code;
 };
