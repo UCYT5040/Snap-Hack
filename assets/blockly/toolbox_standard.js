@@ -6,7 +6,7 @@ BLOCKLY_TOOLBOX_XML['standard'] =
 // From XML string/file, replace ^\s?(\s*)?(<.*>)$ with \+$1'$2'
 // Tweak first and last line.
 '<xml xmlns="https://developers.google.com/blockly/xml">'
-+ '<category name="Motion" colour="#a7a8aa">\n<block type="hacked_custom"><field name="js"></field></block>'
++ '<category name="Motion" colour="#a7a8aa">\n<block type="hacked_custom"></block>'
 +   '<block type="movebotforward">'
 +    '<field name="duration">10</field>'
 +    '<field name="botSpeed">Fast</field>'
