@@ -1148,7 +1148,7 @@ Blockly.defineBlocksWithJsonArray([
 },
   {
   "type": "hacked_custom",
-  "message0": "custom, enter code upon running. make sure to save ur code it might get lost",
+  "message0": "custom, scroll down to enter code, see github for docs",
   "previousStatement": null,
   "nextStatement": null,
   "colour": 230,

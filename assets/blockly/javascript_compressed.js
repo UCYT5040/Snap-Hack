@@ -433,6 +433,6 @@ Blockly.JavaScript['motor_block'] = function(block) {
 Blockly.JavaScript['hacked_custom'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
 
-  var code = "'to be added later'";
+  var code = document.getElementById('jsinput').value;
   return code;
 };
