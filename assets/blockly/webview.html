@@ -4,12 +4,20 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <style type="text/css">
-    html, body, #blocklyDiv {
+    html, body {
       border: 0;
       height: 100%;
       margin: 0;
       padding: 0;
       width: 100%;
+    }
+    #blocklyDiv {
+      position: absolute;
+      left:0;right:0;bottom:0;top:0;
+      z-index: 1000;
+    }
+    .editortoggle {
+      z-index: 1001;
     }
   </style>
   <script src="toolbox_standard.js"></script>
@@ -22,8 +30,20 @@
 </head>
 <body>
   <div id="blocklyDiv"></div>
-  <textarea style="position:absolute;bottom:20px;left:10px;z-index:50000;" id="jsinput" type="text" placeholder="javascript code, any custom blocks will have this"></textarea>
+  <div id="editor" style="position:absolute;top:0;right:0;bottom:0;left:0;"></div>
+  <button style="position:absolute;top:0;right:0;z-index:10000;" onclick="$('#editor').toggleClass('editortoggle')">toggle code editor for custom block</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.min.js" integrity="sha512-hDyKEpCc9jPn3u2VffFjScCtNqZI+BAbThAhhDYqqqZbxMqmTSNIgdU0OU9BRD/8wFxHIWLAo561hh9fW7j6sA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/mode-javascript.min.js" integrity="sha512-37ta5K4KVYs+MEmIg2xnZxJrdiQmBSKt+JInvyPrq9uz7aF67lMJT/t91EYoYj520jEcGlih41kCce7BRTmE3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/theme-monokai.min.js" integrity="sha512-wZYGbdk0giM73l8BLDNfSEziApAmH8DvXey6zNLG3QUgDeDsMAPm3FIdjhLwrGOWO0vdVHkVxeUzOBR0Hc/xBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/worker-javascript.min.js" integrity="sha512-hwPBZJdHUlQzk8FedQ6S0eqJw/26H3hQ1vjpdAVJLaZU/AJSkhU29Js3/J+INYpxEUbgD3gubC7jBBr+WDqS2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/snippets/javascript.min.js" integrity="sha512-V7l3AcLeSIrWrNl2C90rpphSbtqOeOqgBQjG7cz0h3sHi0k5em/woY8Ka7R+LMokENc/6kng2HN/EHCXJHS4tA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="text/javascript">
+
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+
     var workspacePlayground = Blockly.inject('blocklyDiv', {
           media: 'media/',
           toolbox: BLOCKLY_TOOLBOX_XML['standard'],
